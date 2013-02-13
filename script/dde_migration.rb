@@ -1,6 +1,7 @@
 LogStatus = Logger.new(Rails.root.join("log","migration_status.txt"))
 LogVer4 = Logger.new(Rails.root.join("log","version4_ids.txt"))
 LogErr = Logger.new(Rails.root.join("log","error.txt"))
+LogIds = Logger.new(Rails.root.join("log","migrated_ids.txt"))
 class DdeMigration
   def self.get_patient_identifiers
     self.log_progress("Started at :#{Time.now().strftime('%Y-%m-%d %H:%M:%S')}",true)
@@ -110,6 +111,7 @@ def self.create_person_on_dde(params)
           legacy_national_id.save! rescue LogErr.error "passed national id " + passed_national_id.to_s
         end
         self.log_progress("migrated ***#{national_id}***")
+        LogIds.info national_id.to_s
      else
        LogErr.error "passed national id " + passed_national_id.to_s
      end
