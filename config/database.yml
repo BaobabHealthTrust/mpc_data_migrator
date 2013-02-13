@@ -1,6 +1,6 @@
 development:
   adapter: mysql2
-  database: dde_proxy
+  database: dde_proxy_test_1
   host: localhost
   username: root
   password: root
@@ -8,7 +8,7 @@ development:
   
 production:
   adapter: mysql2
-  database: dde_proxy
+  database: dde_proxy_test_1
   host: localhost
   username: root
   password: root
