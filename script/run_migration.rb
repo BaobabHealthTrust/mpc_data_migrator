@@ -1,5 +1,5 @@
 
-require "script/migration_analysis"
-require "script/dde_migration"
+#require "script/migration_analysis"
+#require "script/dde_migration"
 
-DdeMigration.get_patient_identifiers
+#DdeMigration.get_patient_identifiers
