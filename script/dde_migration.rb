@@ -1,7 +1,7 @@
-LogStatus = Logger.new(Rails.root.join("log","migration_status.txt"))
-LogVer4 = Logger.new(Rails.root.join("log","version4_ids.txt"))
-LogErr = Logger.new(Rails.root.join("log","error.txt"))
-LogIds = Logger.new(Rails.root.join("log","migrated_ids.txt"))
+#LogStatus = Logger.new(Rails.root.join("log","migration_status.txt"))
+#LogVer4 = Logger.new(Rails.root.join("log","version4_ids.txt"))
+#LogErr = Logger.new(Rails.root.join("log","error.txt"))
+#LogIds = Logger.new(Rails.root.join("log","migrated_ids.txt"))
 class DdeMigration
   def self.get_patient_identifiers
     self.log_progress("Started at :#{Time.now().strftime('%Y-%m-%d %H:%M:%S')}",true)
@@ -16,7 +16,7 @@ class DdeMigration
     anc_common_ids = self.read_files("ANC","bart_anc_common_ids.txt")
     
     self.log_progress("Started searching for BART2  patient identifiers at :#{Time.now().strftime('%Y-%m-%d %H:%M:%S')}",true)
-    bart2_patient_identifiers = Bart2PatientIdentifier.where(:voided => 0,:identifier_type => identifier_type_id).order(:identifier)
+    bart2_patient_identifiers = Bart2PatientIdentifier.where("identifier > ? AND voided = 0 AND identifier_type = ?",'P170000508467',identifier_type_id).order(:identifier)
     self.log_progress("Found #{bart2_patient_identifiers.count} BART2 patient identifiers", true)
     self.log_progress("Started searching for maternity patient identifiers at :#{Time.now().strftime('%Y-%m-%d %H:%M:%S')}",true)
     mat_patient_identifiers = MatPatientIdentifier.where("identifier NOT IN(?) AND voided = 0 AND identifier_type = ?",mat_common_ids, identifier_type_id).order(:identifier)
@@ -43,9 +43,9 @@ class DdeMigration
   def self.do_migrate(patient_identifiers)
     patient_identifiers.each do |patient_identifier|
       next if patient_identifier.blank?
-      next if patient_identifier.patient.blank?
-      next if patient_identifier.patient.person.blank?
-      person = patient_identifier.patient.person
+      next if patient_identifier.first.patient.blank?
+      next if patient_identifier.first.patient.person.blank?
+      person = patient_identifier.first.patient.person
       person_params = self.build_dde_person(person)
       self.create_person_on_dde(person_params)
     end
@@ -58,7 +58,7 @@ class DdeMigration
               "birthdate" => (person.birthdate rescue nil),
               "birth_year" => (person.birthdate.to_date.year rescue nil),
               "birth_month" => (person.birthdate.to_date.month rescue nil),
-              "birth_day" => (person.birthdate.to_date.date rescue nil),
+              "birth_day" => (person.birthdate.to_date.day rescue nil),
               "names" => {
                 "given_name" => person.names.first.given_name,
                 "family_name" => person.names.first.family_name
@@ -221,7 +221,6 @@ def self.log_progress(message,log=false)
     LogStatus.info "#" * message.length
   end
 end
-
 
 self.get_patient_identifiers
 
