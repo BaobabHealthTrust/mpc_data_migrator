@@ -166,8 +166,9 @@ def self.build_person_for_dde(params)
     passed_params = {"person"=>
         {"data" =>
           {"addresses"=>
-            {"state_province"=> (address_params["address2"] rescue ""),
-            "address2"=> (address_params["address1"] rescue ""),
+            {"state_province"=> (address_params["state_province"] rescue ""),
+            "address2"=> (address_params["address2"] rescue ""),
+            "address1"=> (address_params["address1"] rescue ""),
             "city_village"=> (address_params["city_village"] rescue ""),
             "county_district"=> (address_params["county_district"] rescue "")
           },

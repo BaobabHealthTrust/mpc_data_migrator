@@ -1,33 +1,33 @@
 development:
   adapter: mysql2
-  database: dde_proxy_test_1
+  database: openmrs_mpc_reg
   host: localhost
   username: root
-  password: root
+  password: password
   pool: 500
   
 production:
   adapter: mysql2
-  database: dde_proxy_test_1
+  database: openmrs_mpc_reg
   host: localhost
   username: root
-  password: root
+  password: password
   pool: 500
 
 openmrs_bart2_development:
   adapter: mysql2
-  database: openmrs_mpc_bart2
+  database: openmrs_mpc_reg
   host: localhost
   username: root
-  password: root
+  password: password
   pool: 500
 
 openmrs_anc_development:
   adapter: mysql2
-  database: openmrs_mpc_anc
+  database: openmrs_kch
   host: localhost
   username: root
-  password: root
+  password: password
   pool: 500
 
 openmrs_mat_development:
@@ -35,15 +35,15 @@ openmrs_mat_development:
   database: openmrs_mpc_mat
   host: localhost
   username: root
-  password: root
+  password: password
   pool: 500
 
 openmrs_bart2_production:
   adapter: mysql2
-  database: openmrs_mpc_bart2
+  database: openmrs_mpc_reg
   host: localhost
   username: root
-  password: root
+  password: password
   pool: 500
 
 openmrs_anc_production:
@@ -51,7 +51,7 @@ openmrs_anc_production:
   database: openmrs_mpc_anc
   host: localhost
   username: root
-  password: root
+  password: password
   pool: 500
 
 openmrs_mat_production:
@@ -59,6 +59,6 @@ openmrs_mat_production:
   database: openmrs_mpc_mat
   host: localhost
   username: root
-  password: root
+  password: password
   pool: 500
 

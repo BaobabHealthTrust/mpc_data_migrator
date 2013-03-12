@@ -3,7 +3,7 @@
     <type>org.netbeans.modules.ruby.railsprojects</type>
     <configuration>
         <data xmlns="http://www.netbeans.org/ns/rails-project/1">
-            <name>MPC Data Migrator</name>
+            <name>MPC DDE Data Migrator</name>
         </data>
     </configuration>
 </project>
