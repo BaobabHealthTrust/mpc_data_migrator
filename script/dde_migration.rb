@@ -170,7 +170,8 @@ def self.build_person_for_dde(params)
             "address2"=> (address_params["address2"] rescue ""),
             "address1"=> (address_params["address1"] rescue ""),
             "city_village"=> (address_params["city_village"] rescue ""),
-            "county_district"=> (address_params["county_district"] rescue "")
+            "county_district"=> (address_params["county_district"] rescue ""),
+            "neighborhood_cell" =>(address_params["neighborhood_cell"] rescue "")
           },
           "attributes"=>
             {"occupation"=> (params["person"]["occupation"] rescue ""),
