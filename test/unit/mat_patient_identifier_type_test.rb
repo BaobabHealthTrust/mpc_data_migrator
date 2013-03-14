@@ -1,3 +1,23 @@
+# == Schema Information
+#
+# Table name: patient_identifier_type
+#
+#  patient_identifier_type_id :integer          not null, primary key
+#  name                       :string(50)       default(""), not null
+#  description                :text             default(""), not null
+#  format                     :string(50)
+#  check_digit                :boolean          default(FALSE), not null
+#  creator                    :integer          default(0), not null
+#  date_created               :datetime         not null
+#  required                   :boolean          default(FALSE), not null
+#  format_description         :string(255)
+#  validator                  :string(200)
+#  retired                    :boolean          default(FALSE), not null
+#  retired_by                 :integer
+#  date_retired               :datetime
+#  retire_reason              :string(255)
+#
+
 require 'test_helper'
 
 class MatPatientIdentifierTypeTest < ActiveSupport::TestCase
