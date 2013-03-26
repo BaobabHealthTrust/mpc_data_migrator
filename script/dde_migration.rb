@@ -43,9 +43,13 @@ class DdeMigration
   def self.do_migrate(patient_identifiers)
     patient_identifiers.each do |patient_identifier|
       next if patient_identifier.blank?
-      next if patient_identifier.first.patient.blank?
-      next if patient_identifier.first.patient.person.blank?
-      person = patient_identifier.first.patient.person
+      next if patient_identifier.patient.blank?
+      next if patient_identifier.patient.person.blank?
+      if patient_identifier.kind_of?(Array)
+        person = patient_identifier.first.patient.person
+      else
+        person = patient_identifier.patient.person
+      end
       person_params = self.build_dde_person(person)
       self.create_person_on_dde(person_params)
     end
