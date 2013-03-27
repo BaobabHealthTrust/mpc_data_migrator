@@ -1,7 +1,7 @@
-#LogStatus = Logger.new(Rails.root.join("log","migration_status.txt"))
-#LogVer4 = Logger.new(Rails.root.join("log","version4_ids.txt"))
-#LogErr = Logger.new(Rails.root.join("log","error.txt"))
-#LogIds = Logger.new(Rails.root.join("log","migrated_ids.txt"))
+LogStatus = Logger.new(Rails.root.join("log","migration_status.txt"))
+LogVer4 = Logger.new(Rails.root.join("log","version4_ids.txt"))
+LogErr = Logger.new(Rails.root.join("log","error.txt"))
+LogIds = Logger.new(Rails.root.join("log","migrated_ids.txt"))
 class DdeMigration
   def self.get_patient_identifiers
     self.log_progress("Started at :#{Time.now().strftime('%Y-%m-%d %H:%M:%S')}",true)
@@ -73,18 +73,18 @@ class DdeMigration
                 }
               },
               "attributes" => {
-                "occupation" => (get_full_attribute(person, "Occupation") rescue nil),
-                "cell_phone_number" => (get_full_attribute(person, "Cell Phone Number") rescue nil),
-                "citizenship" => (get_full_attribute(person, "Citizenship") rescue nil),
-                "race" => (get_full_attribute(person, "Race") rescue nil)
+                "occupation" => (get_full_attribute(person, "Occupation") rescue ""),
+                "cell_phone_number" => (get_full_attribute(person, "Cell Phone Number") rescue ""),
+                "citizenship" => (get_full_attribute(person, "Citizenship") rescue ""),
+                "race" => (get_full_attribute(person, "Race") rescue "")
               },
               "addresses" => {
-                "address1" => (person.addresses.last.current_address1 rescue nil),
-                "city_village" => (person.addresses.last.city_village rescue nil),
-                "address2" => (person.addresses.last.current_address2 rescue nil),
-                "subregion" => (person.addresses.last.subregion rescue nil),
-                "county_district" => (person.addresses.last.county_district rescue nil),
-                "neighborhood_cell" => (person.addresses.last.neighborhood_cell rescue nil)
+                "address1" => (person.addresses.last.address1 rescue ""),
+                "city_village" => (person.addresses.last.city_village rescue ""),
+                "address2" => (person.addresses.last.address2 rescue ""),
+                "state_province" => (person.addresses.last.state_province rescue ""),
+                "county_district" => (person.addresses.last.county_district rescue ""),
+                "neighborhood_cell" => (person.addresses.last.neighborhood_cell rescue "")
               }
             }
           }
