@@ -7,6 +7,8 @@ class PersonNameCode < ActiveRecord::Base
     found = self.find_by_person_id(person.id)
     return if person.given_name.blank?
     return if person.family_name.blank?
+    return unless person.given_name.match(/null/).blank?
+    return unless person.family_name.match(/null/).blank?
     return unless person.given_name.match(/[0-9]/).blank?
     return unless person.family_name.match(/[0-9]/).blank?
 
