@@ -1,0 +1,27 @@
+== OpenMRS to DDE Migrator
+
+This is an application for migrating OpenMRS demographics to DDE
+
+=== Installation 
+
+
+  $ bundle install
+
+Copy config/database.yml.example to config/database.yml .
+
+Set the Development and Production environments to DDE database
+Set the other environments to corresponding Bart2,Martenity and ANC
+databases
+
+
+Copy config/site_config.yml.example to config/site_config.yml
+set the site_id to your site id
+  
+Run bundle exec rails runner script/migration_analysis.rb to analyse the datasets
+Run bundle exec rails runner script/dde_migration.rb to do the migration
+
+
+    
+
+
+
