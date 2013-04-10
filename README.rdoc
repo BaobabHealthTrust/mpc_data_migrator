@@ -19,11 +19,11 @@ set the site_id to your site id
   
 To analyse the datasets run:
 
-	$bundle exec rails runner script/migration_analysis.rb 
+	$ bundle exec rails runner script/migration_analysis.rb 
 	
 To do the migration run:	
  
-	$bundle exec rails runner script/dde_migration.rb 
+	$ bundle exec rails runner script/dde_migration.rb 
 
 
     
