@@ -12,7 +12,7 @@ Copy config/database.yml.example to config/database.yml
 
 Set the Development and Production environments to DDE database
 
-Set the other environments too corresponding Bart2,Martenity and ANC
+Set the other environments to corresponding Bart2,Martenity and ANC
 databases
 
 
