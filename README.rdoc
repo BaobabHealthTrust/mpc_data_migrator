@@ -4,8 +4,7 @@ This is an application for migrating OpenMRS demographics to DDE
 
 === Installation 
 
-
-  $ bundle install
+	$ bundle install
 
 Copy config/database.yml.example to config/database.yml .
 
@@ -18,9 +17,12 @@ Copy config/site_config.yml.example to config/site_config.yml
 set the site_id to your site id
   
 #To analyse the datasets run
+
+
 	$	bundle exec rails runner script/migration_analysis.rb 
 	
 #To do the migration run	
+
 	$	bundle exec rails runner script/dde_migration.rb 
 
 
