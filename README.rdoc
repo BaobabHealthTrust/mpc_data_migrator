@@ -17,8 +17,13 @@ databases
 Copy config/site_config.yml.example to config/site_config.yml
 set the site_id to your site id
   
-Run bundle exec rails runner script/migration_analysis.rb to analyse the datasets
-Run bundle exec rails runner script/dde_migration.rb to do the migration
+To analyse the datasets run:
+
+	$bundle exec rails runner script/migration_analysis.rb 
+	
+To do the migration run:	
+ 
+	$bundle exec rails runner script/dde_migration.rb 
 
 
     
