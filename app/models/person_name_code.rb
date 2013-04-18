@@ -9,21 +9,24 @@ class PersonNameCode < ActiveRecord::Base
     return if person.given_name.blank?
     return if person.family_name.blank?
 
-    next if person.given_name.strip.length == 1
-    next if person.family_name.strip.length == 1
-
     return unless person.given_name.match(/[0-9]/).blank?
     return unless person.family_name.match(/[0-9]/).blank?
 
     unless person.family_name.match(/[[:punct:]]/).blank?
       if person.family_name.match(/[A'z]/).blank?
-         next
+         return
+      end
+      if person.family_name.strip.length == 1
+         return
       end
     end
 
     unless person.given_name.match(/[[:punct:]]/).blank?
       if person.given_name.match(/[A'z]/).blank?
-        next
+        return
+      end
+      if person.given_name.strip.length == 1
+        return
       end
     end
 
@@ -56,11 +59,17 @@ class PersonNameCode < ActiveRecord::Base
       unless person.family_name.match(/[[:punct:]]/).blank?
        if person.family_name.match(/[A'z]/).blank?
           next
-       end 
+       end
+       if person.family_name.strip.length == 1
+          next
+       end
       end
 
       unless person.given_name.match(/[[:punct:]]/).blank?
         if person.given_name.match(/[A'z]/).blank?
+          next
+        end
+        if person.given_name.strip.length == 1
           next
         end
       end
