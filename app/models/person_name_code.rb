@@ -5,21 +5,26 @@ class PersonNameCode < ActiveRecord::Base
 
   def self.create_name_code(person)
     found = self.find_by_person_id(person.id)
-    
-    return unless person.given_name.match(/[0-9]/).blank?
-    return unless person.family_name.match(/[0-9]/).blank?
 
     return if person.given_name.blank?
     return if person.family_name.blank?
 
+    next if person.given_name.strip.length == 1
+    next if person.family_name.strip.length == 1
+
+    return unless person.given_name.match(/[0-9]/).blank?
+    return unless person.family_name.match(/[0-9]/).blank?
+
     unless person.family_name.match(/[[:punct:]]/).blank?
-      return if person.family_name.match(/A'z/).blank?
-      return if person.family_name.strip.length == 1
+      if person.family_name.match(/[A'z]/).blank?
+         next
+      end
     end
 
     unless person.given_name.match(/[[:punct:]]/).blank?
-      return if person.given_name.match(/A'z/).blank?
-      return if person.given_name.strip.length == 1
+      if person.given_name.match(/[A'z]/).blank?
+        next
+      end
     end
 
     if found.blank?
@@ -42,17 +47,22 @@ class PersonNameCode < ActiveRecord::Base
       next if person.given_name.blank?
       next if person.family_name.blank?
 
+      next if person.given_name.strip.length == 1
+      next if person.family_name.strip.length == 1
+
       next unless person.given_name.match(/[0-9]/).blank?
       next unless person.family_name.match(/[0-9]/).blank?
 
       unless person.family_name.match(/[[:punct:]]/).blank?
-        next if person.family_name.match(/A'z/).blank?
-        next if person.family_name.strip.length == 1
+       if person.family_name.match(/[A'z]/).blank?
+          next
+       end 
       end
 
       unless person.given_name.match(/[[:punct:]]/).blank?
-        next if person.given_name.match(/A'z/).blank?
-        next if person.given_name.strip.length == 1
+        if person.given_name.match(/[A'z]/).blank?
+          next
+        end
       end
       
       p = PersonNameCode.create(
