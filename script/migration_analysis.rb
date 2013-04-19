@@ -9,10 +9,10 @@ LogTimeandCounts = Logger.new(Rails.root.join("log","time_and_counts.txt"))
 
 # Select all people from model that are females and count them
 def get_people(personmodel,name)
-  log_progress("Searching for #{name} female patients from :#{Time.now().strftime('%Y-%m-%d %H:%M:%S')}",true)
-  people = personmodel.where(:voided => 0,:gender => "F")
-  log_progress("Finished searching for #{name} female patients at:#{Time.now().strftime('%Y-%m-%d %H:%M:%S')}",true)
-  log_progress("Found ##{personmodel.count} female patients in #{name}",true)
+  log_progress("Searching for #{name} patients from :#{Time.now().strftime('%Y-%m-%d %H:%M:%S')}",true)
+  people = personmodel.where(:voided => 0)
+  log_progress("Finished searching for #{name} patients at:#{Time.now().strftime('%Y-%m-%d %H:%M:%S')}",true)
+  log_progress("Found ##{personmodel.count} patients in #{name}",true)
   return people
 end
 
