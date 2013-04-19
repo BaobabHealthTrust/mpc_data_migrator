@@ -228,6 +228,6 @@ def self.log_progress(message,log=false)
   end
 end
 
-self.get_patient_identifiers
+#self.get_patient_identifiers
 
 end
