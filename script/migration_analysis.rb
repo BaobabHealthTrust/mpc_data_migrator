@@ -107,10 +107,10 @@ def build_demographics(people)
     next if person.blank?
     next if person.patient.blank?
     next if person.patient.patient_identifiers.first.blank?
-    demographics[person.patient.patient_identifiers.first.identifier] = {"given_name" => person.names.first.given_name.titlecase,
-                                                                         "family_name" => person.names.first.family_name.titlecase,
-                                                                         "gender" => person.gender,
-                                                                         "birthdate" => person.birthdate}
+    demographics[person.patient.patient_identifiers.first.identifier.upcase] = {"given_name" => person.names.first.given_name.titlecase,
+                                                                                "family_name" => person.names.first.family_name.titlecase,
+                                                                                "gender" => person.gender,
+                                                                                "birthdate" => person.birthdate}
   end
  return demographics
 end
