@@ -14,28 +14,46 @@ class DdeMigration
     mat_common_ids = self.read_files("Martenity","bart_mat_common_ids.txt")
     anc_common_ids = []
     anc_common_ids = self.read_files("ANC","bart_anc_common_ids.txt")
+    opd_common_ids = []
+    opd_common_ids = self.read_files("OPD","bart_opd_common_ids.txt")
+    
     
     self.log_progress("Started searching for BART2  patient identifiers at :#{Time.now().strftime('%Y-%m-%d %H:%M:%S')}",true)
     bart2_patient_identifiers = Bart2PatientIdentifier.where("voided = 0 AND identifier_type = ?", identifier_type_id).order(:identifier)
     self.log_progress("Found #{bart2_patient_identifiers.count} BART2 patient identifiers", true)
+
     self.log_progress("Started searching for maternity patient identifiers at :#{Time.now().strftime('%Y-%m-%d %H:%M:%S')}",true)
     mat_patient_identifiers = MatPatientIdentifier.where("identifier NOT IN(?) AND voided = 0 AND identifier_type = ?",mat_common_ids, identifier_type_id).order(:identifier)
     self.log_progress("Found #{mat_patient_identifiers.count} Maternity patient identifiers", true)
+
     self.log_progress("Started searching for ANC patient identifiers at :#{Time.now().strftime('%Y-%m-%d %H:%M:%S')}",true)
     anc_patient_identifiers = AncPatientIdentifier.where("identifier NOT IN(?) AND voided = 0 AND identifier_type = ?",anc_common_ids, identifier_type_id).order(:identifier)
     self.log_progress("Found #{anc_patient_identifiers.count} ANC patient identifiers", true)
+
+
+     self.log_progress("Started searching for OPD patient identifiers at :#{Time.now().strftime('%Y-%m-%d %H:%M:%S')}",true)
+    anc_patient_identifiers = OpdPatientIdentifier.where("identifier NOT IN(?) AND voided = 0 AND identifier_type = ?",opd_common_ids, identifier_type_id).order(:identifier)
+    self.log_progress("Found #{opd_patient_identifiers.count} ANC patient identifiers", true)
+
+
 
     self.log_progress("Started migrating data at :#{Time.now().strftime('%Y-%m-%d %H:%M:%S')}",true)
 
     self.log_progress("Started migrating BART2 demographics at :#{Time.now().strftime('%Y-%m-%d %H:%M:%S')}",true)
     self.do_migrate(bart2_patient_identifiers)
     self.log_progress("Finished migrating BART2 demographics at :#{Time.now().strftime('%Y-%m-%d %H:%M:%S')}",true )
+
     self.log_progress("Started migrating Maternity demographics at :#{Time.now().strftime('%Y-%m-%d %H:%M:%S')}",true)
     self.do_migrate(mat_patient_identifiers)
     self.log_progress("Finished migrating Maternity demographics at :#{Time.now().strftime('%Y-%m-%d %H:%M:%S')}",true )
+
     self.log_progress("Started migrating ANC demographics at :#{Time.now().strftime('%Y-%m-%d %H:%M:%S')}",true)
     self.do_migrate(anc_patient_identifiers)
     self.log_progress("Finished migrating ANC demographics at :#{Time.now().strftime('%Y-%m-%d %H:%M:%S')}",true )
+   
+    self.log_progress("Started migrating OPD demographics at :#{Time.now().strftime('%Y-%m-%d %H:%M:%S')}",true)
+    self.do_migrate(opd_patient_identifiers)
+    self.log_progress("Finished migrating OPD demographics at :#{Time.now().strftime('%Y-%m-%d %H:%M:%S')}",true )
 
     self.log_progress("Finished migration at :#{Time.now().strftime('%Y-%m-%d %H:%M:%S')}",true)
   end

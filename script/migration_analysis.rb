@@ -1,13 +1,16 @@
 LogBartMatCommonIds = Logger.new(Rails.root.join("log","bart_mat_common_ids.txt"))
 LogBartAncCommonIds =  Logger.new(Rails.root.join("log","bart_anc_common_ids.txt"))
+LogBartOpdCommonIds = Logger.new(Rails.root.join("log","bart_opd_common_ids.txt"))
 LogBartMatDiffIds = Logger.new(Rails.root.join("log","bart_mat_diff_ids.txt"))
 LogBartAncDiffIds = Logger.new(Rails.root.join("log","bart_anc_diff_ids.txt"))
+LogBartOpdDiffIds = Logger.new(Rails.root.join("log","bart_opd_diff_ids.txt"))
 LogBartOnlyIds = Logger.new(Rails.root.join("log","bart_only_ids.txt"))
 LogMatOnlyIds = Logger.new(Rails.root.join("log","mat_only_ids.txt"))
 LogAncOnlyIds = Logger.new(Rails.root.join("log","anc_only_ids.txt"))
+LogOpdOnlyIds = Logger.new(Rails.root.join("log","opd_only_ids.txt"))
 LogTimeandCounts = Logger.new(Rails.root.join("log","time_and_counts.txt"))
 
-# Select all people from model that are females and count them
+# Select all people from model and count them
 def get_people(personmodel,name)
   log_progress("Searching for #{name} patients from :#{Time.now().strftime('%Y-%m-%d %H:%M:%S')}",true)
   people = personmodel.where(:voided => 0)
@@ -38,6 +41,10 @@ def check_demographics
   anc_demographics = build_demographics(get_people(AncPerson,"ANC"))
   log_progress("Finished buiding ANC demographics at: #{Time.now().strftime('%Y-%m-%d %H:%M:%S')}",true)
   log_progress("There are : ##{anc_demographics.count} patient demographics in ANC",true)
+    
+  opd_demographics = build_demographics(get_people(OpdPerson,"OPD"))
+  log_progress("Finished buiding OPD demographics at: #{Time.now().strftime('%Y-%m-%d %H:%M:%S')}",true)
+  log_progress("There are : ##{opd_demographics .count} patient demographics in OPD",true)
 
 
   log_progress("Searching MAT demographics at: #{Time.now().strftime('%Y-%m-%d %H:%M:%S')}",true)
@@ -90,6 +97,31 @@ def check_demographics
     end
   end
 
+
+  log_progress("Searching OPD demographics at: #{Time.now().strftime('%Y-%m-%d %H:%M:%S')}",true)
+
+  opd_common_ids = []
+  opd_diff_ids = []
+  opd_bart_only_ids = []
+  bart_demographics.each do|key,value|
+    next if key.blank?
+    unless opd_demographics[key].blank?
+      if opd_demographics[key] == value
+        opd_common_ids << key
+        log_progress("common national patient identifier >>> #{key}")
+        LogBartOpdCommonIds.info key.to_s
+      else
+        opd_diff_ids << key
+        log_progress("found in opd but for a different person >> #{key}")
+        LogBartOpdDiffIds.info key.to_s
+      end
+    else
+      opd_bart_only_ids << key
+      log_progress("not found in opd > #{key}")
+      LogBartOnlyIds.info key.to_s  
+    end
+  end
+
   log_progress("##{common_ids.count} national ids found both in BART 2.0 and Maternity for the same patients",true)
   log_progress("##{diff_ids.count} national ids found both in BART 2.0 and Maternity but for different patients",true)
   log_progress("##{bart_only_ids.count} national ids found in BART 2.0  only and not in Maternity",true)
@@ -97,6 +129,10 @@ def check_demographics
   log_progress("##{anc_bart_common_ids.count} national ids found both in BART 2.0 and ANC for the same patients",true)
   log_progress("##{anc_diff_ids.count} national ids found both in BART 2.0 and ANC but for different patients",true)
   log_progress("##{bart_only_ids_anc.count} national ids found in BART 2.0  only and not in ANC",true)
+
+  log_progress("##{opd_common_ids.count} national ids found both in BART 2.0 and OPD for the same patients",true)
+  log_progress("##{opd_diff_ids.count} national ids found both in BART 2.0 and OPD but for different patients",true)
+  log_progress("##{opd_bart_only_ids.count} national ids found in BART 2.0  only and not in OPD",true)
 
   log_progress("Finished checking demographics at: #{Time.now().strftime('%Y-%m-%d %H:%M:%S')}",true)
 end
