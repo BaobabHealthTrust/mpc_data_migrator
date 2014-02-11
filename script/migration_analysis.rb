@@ -24,6 +24,7 @@ def get_patients(people)
   patients = []
   people.each do |person|
     patients << person.patient
+    log_progress("Getting patient number ###: " + patients.count.to_s)
   end
   return patients
 end
@@ -149,6 +150,7 @@ def build_demographics(people)
                                                                                 "family_name" => person.names.first.family_name.titlecase,
                                                                                 "gender" => person.gender,
                                                                                 "birthdate" => person.birthdate}
+   log_progress("Built ### " + demographics[person.patient.patient_identifiers.first.identifier.upcase].to_s)
   end
  return demographics
 end
