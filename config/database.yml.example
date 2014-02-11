@@ -38,6 +38,14 @@ openmrs_mat_development:
   password: password
   pool: 500
 
+openmrs_opd_development:
+  adapter: mysql2
+  database: openmrs_mpc_opd
+  host: localhost
+  username: root
+  password: password
+  pool: 500
+
 openmrs_bart2_production:
   adapter: mysql2
   database: openmrs_mpc
@@ -62,3 +70,10 @@ openmrs_mat_production:
   password: password
   pool: 500
 
+openmrs_opd_production:
+  adapter: mysql2
+  database: openmrs_mpc_opd
+  host: localhost
+  username: root
+  password: password
+  pool: 500
