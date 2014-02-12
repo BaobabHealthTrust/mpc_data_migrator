@@ -45,7 +45,7 @@ def check_demographics
     
   opd_demographics = build_demographics(get_people(OpdPerson,"OPD"))
   log_progress("Finished buiding OPD demographics at: #{Time.now().strftime('%Y-%m-%d %H:%M:%S')}",true)
-  log_progress("There are : ##{opd_demographics .count} patient demographics in OPD",true)
+  log_progress("There are : ##{opd_demographics.count} patient demographics in OPD",true)
 
 
   log_progress("Searching MAT demographics at: #{Time.now().strftime('%Y-%m-%d %H:%M:%S')}",true)
@@ -141,16 +141,16 @@ end
 def build_demographics(people)
   demographics = {}
   people.each do |person|
-    next if person.blank?
-    next if person.patient.blank?
-    next if person.patient.patient_identifiers.first.blank?
-    next if person.names.first.given_name.blank?
-    next if person.names.first.family_name.blank?
-    demographics[person.patient.patient_identifiers.first.identifier.upcase] = {"given_name" => person.names.first.given_name.titlecase,
+    begin
+     demographics[person.patient.patient_identifiers.first.identifier.upcase] = {"given_name" => person.names.first.given_name.titlecase,
                                                                                 "family_name" => person.names.first.family_name.titlecase,
                                                                                 "gender" => person.gender,
                                                                                 "birthdate" => person.birthdate}
-   log_progress("Built ### " + demographics[person.patient.patient_identifiers.first.identifier.upcase].to_s)
+     log_progress("Built ####### " + demographics[person.patient.patient_identifiers.first.identifier.upcase].to_s)
+    rescue Exception => e
+      log_progress("Error #####{e}")
+      next
+    end  
   end
  return demographics
 end
