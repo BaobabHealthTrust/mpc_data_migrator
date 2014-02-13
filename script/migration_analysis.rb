@@ -148,7 +148,7 @@ def build_demographics(people)
                                                                                 "birthdate" => person.birthdate}
      log_progress("Built ####### " + demographics[person.patient.patient_identifiers.first.identifier.upcase].to_s)
     rescue Exception => e
-      log_progress("Error #####{e}")
+      log_progress("Error ##### {e}")
       next
     end  
   end
