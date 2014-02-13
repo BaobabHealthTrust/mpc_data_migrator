@@ -33,7 +33,7 @@ class DdeMigration
 
      self.log_progress("Started searching for OPD patient identifiers at :#{Time.now().strftime('%Y-%m-%d %H:%M:%S')}",true)
     anc_patient_identifiers = OpdPatientIdentifier.where("identifier NOT IN(?) AND voided = 0 AND identifier_type = ?",opd_common_ids, identifier_type_id).order(:identifier)
-    self.log_progress("Found #{opd_patient_identifiers.count} ANC patient identifiers", true)
+    self.log_progress("Found #{opd_patient_identifiers.count} OPD patient identifiers", true)
 
 
 
@@ -60,16 +60,19 @@ class DdeMigration
   
   def self.do_migrate(patient_identifiers)
     patient_identifiers.each do |patient_identifier|
-      next if patient_identifier.blank?
-      next if patient_identifier.patient.blank?
-      next if patient_identifier.patient.person.blank?
-      if patient_identifier.kind_of?(Array)
-        person = patient_identifier.first.patient.person
-      else
-        person = patient_identifier.patient.person
-      end
-      person_params = self.build_dde_person(person)
-      self.create_person_on_dde(person_params)
+      begin
+        if patient_identifier.kind_of?(Array)
+        	person = patient_identifier.first.patient.person
+      	else
+        	person = patient_identifier.patient.person
+     	  end
+      	person_params = self.build_dde_person(person)
+        pp = self.create_person_on_dde(person_params)
+      	log_progress("Created ####### " + pp.inspect) 
+      rescue Exception => e
+         log_progress("Error ##### {e}")
+         next
+      end  
     end
   end
 
@@ -228,10 +231,17 @@ def self.read_files(model_name,file_name)
     common_ids = []
     common_ids_stripped = []
     common_ids = common_id_file.readlines
+    
     common_ids.each do |common_id|
-      next if common_id.blank?
-      next if common_id.strip.length > 13
-      common_ids_stripped << common_id.strip
+      begin
+      	next if common_id.strip.length > 13
+      	next if common_id.strip.length == 6
+     	  common_ids_stripped << common_id.strip
+        log_progress("Added ##### {common_id}")
+      rescue Exception => e
+         log_progress("Error ##### {e}")
+       next
+      end
     end
 
    self.log_progress("Found #{common_ids_stripped.count} BART 2.0 / #{model_name} common National Identifiers", true)
