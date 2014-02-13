@@ -32,7 +32,7 @@ class DdeMigration
 
 
      self.log_progress("Started searching for OPD patient identifiers at :#{Time.now().strftime('%Y-%m-%d %H:%M:%S')}",true)
-    anc_patient_identifiers = OpdPatientIdentifier.where("identifier NOT IN(?) AND voided = 0 AND identifier_type = ?",opd_common_ids, identifier_type_id).order(:identifier)
+    opd_patient_identifiers = OpdPatientIdentifier.where("identifier NOT IN(?) AND voided = 0 AND identifier_type = ?",opd_common_ids, identifier_type_id).order(:identifier)
     self.log_progress("Found #{opd_patient_identifiers.count} OPD patient identifiers", true)
 
 
@@ -70,7 +70,7 @@ class DdeMigration
         pp = self.create_person_on_dde(person_params)
       	log_progress("Created ####### " + pp.inspect) 
       rescue Exception => e
-         log_progress("Error ##### {e}")
+         log_progress("Error ##### #{e}")
          next
       end  
     end
@@ -237,9 +237,9 @@ def self.read_files(model_name,file_name)
       	next if common_id.strip.length > 13
       	next if common_id.strip.length == 6
      	  common_ids_stripped << common_id.strip
-        log_progress("Added ##### {common_id}")
+        log_progress("Read ##### #{common_id}")
       rescue Exception => e
-         log_progress("Error ##### {e}")
+         log_progress("Error ##### #{e}")
        next
       end
     end
