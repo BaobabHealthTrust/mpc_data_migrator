@@ -8,12 +8,13 @@ LogBartOnlyIds = Logger.new(Rails.root.join("log","bart_only_ids.txt"))
 LogMatOnlyIds = Logger.new(Rails.root.join("log","mat_only_ids.txt"))
 LogAncOnlyIds = Logger.new(Rails.root.join("log","anc_only_ids.txt"))
 LogOpdOnlyIds = Logger.new(Rails.root.join("log","opd_only_ids.txt"))
+LogBartBridge = Logger.new(Rails.root.join("log","bart_bridge.txt"))
 LogTimeandCounts = Logger.new(Rails.root.join("log","time_and_counts.txt"))
 
 # Select all people from model and count them
 def get_people(personmodel,name)
   log_progress("Searching for #{name} patients from :#{Time.now().strftime('%Y-%m-%d %H:%M:%S')}",true)
-  people = personmodel.where(:voided => 0)
+  people = personmodel.where("voided = 0 and person_id > 388097")
   log_progress("Finished searching for #{name} patients at:#{Time.now().strftime('%Y-%m-%d %H:%M:%S')}",true)
   log_progress("Found ##{personmodel.count} patients in #{name}",true)
   return people
@@ -36,42 +37,31 @@ def check_demographics
   bart_demographics =  build_demographics(get_people(Bart2Person,"BART 2.0"))
   log_progress("Finished buiding BART demographics at: #{Time.now().strftime('%Y-%m-%d %H:%M:%S')}",true)
   log_progress("There are : ##{bart_demographics.count} patient demographics in BART2",true)
-  mat_demographics = build_demographics(get_people(MatPerson,"Martenity"))
-  log_progress("Finished buiding MAT demographics at: #{Time.now().strftime('%Y-%m-%d %H:%M:%S')}",true)
-  log_progress("There are : ##{mat_demographics.count} patient demographics in MAT",true)
-  anc_demographics = build_demographics(get_people(AncPerson,"ANC"))
-  log_progress("Finished buiding ANC demographics at: #{Time.now().strftime('%Y-%m-%d %H:%M:%S')}",true)
-  log_progress("There are : ##{anc_demographics.count} patient demographics in ANC",true)
+=begin
+  #mat_demographics = build_demographics(get_people(MatPerson,"Martenity"))
+  #log_progress("Finished buiding MAT demographics at: #{Time.now().strftime('%Y-%m-%d %H:%M:%S')}",true)
+  #log_progress("There are : ##{mat_demographics.count} patient demographics in MAT",true)
+  #anc_demographics = build_demographics(get_people(AncPerson,"ANC"))
+  #log_progress("Finished buiding ANC demographics at: #{Time.now().strftime('%Y-%m-%d %H:%M:%S')}",true)
+  #log_progress("There are : ##{anc_demographics.count} patient demographics in ANC",true)
     
-  opd_demographics = build_demographics(get_people(OpdPerson,"OPD"))
-  log_progress("Finished buiding OPD demographics at: #{Time.now().strftime('%Y-%m-%d %H:%M:%S')}",true)
-  log_progress("There are : ##{opd_demographics.count} patient demographics in OPD",true)
+  #opd_demographics = build_demographics(get_people(OpdPerson,"OPD"))
+  #log_progress("Finished buiding OPD demographics at: #{Time.now().strftime('%Y-%m-%d %H:%M:%S')}",true)
+  #log_progress("There are : ##{opd_demographics.count} patient demographics in OPD",true)
 
 
   log_progress("Searching MAT demographics at: #{Time.now().strftime('%Y-%m-%d %H:%M:%S')}",true)
-
+=end
   common_ids = []
   diff_ids = []
   bart_only_ids = []
   bart_demographics.each do|key,value|
     next if key.blank?
-    unless mat_demographics[key].blank?
-      if mat_demographics[key] == value
-        common_ids << key
-        log_progress("common national patient identifier >>> #{key}")
-        LogBartMatCommonIds.info key.to_s
-      else
-        diff_ids << key
-        log_progress("found in maternity but for a different person >> #{key}")
-        LogBartMatDiffIds.info key.to_s
-      end
-    else
       bart_only_ids << key
       log_progress("not found in maternity > #{key}")
-      LogBartOnlyIds.info key.to_s  
-    end
+      LogBartBridge.info key.to_s  
   end
-
+=begin
 
 
   log_progress("Searching ANC demographics at: #{Time.now().strftime('%Y-%m-%d %H:%M:%S')}",true)
@@ -137,6 +127,7 @@ def check_demographics
 
   log_progress("Finished checking demographics at: #{Time.now().strftime('%Y-%m-%d %H:%M:%S')}",true)
 end
+=end
 # Get patients with identifiers only
 def build_demographics(people)
   demographics = {}
