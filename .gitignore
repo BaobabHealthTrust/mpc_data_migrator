@@ -3,9 +3,7 @@ db/*.sqlite3
 log/*.log
 nbproject/
 tmp/
-.~
-*.~
-*.*~
+*~
 config/database.yml
 config/site_config.yml
 Gemfile.lock

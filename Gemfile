@@ -4,11 +4,14 @@ gem 'rails', '3.0.9'
 gem 'mysql2', '0.2.7'
 gem 'cancan'
 gem 'fastercsv'
-gem 'rest-client'
+gem 'rest-client','1.6.7'
 gem 'redirectr'
 gem 'guid'
 
+gem 'bcrypt', '3.1.7'
+
 gem 'bcrypt-ruby', :require => 'bcrypt'
+
 
 gem 'web-app-theme'
 
