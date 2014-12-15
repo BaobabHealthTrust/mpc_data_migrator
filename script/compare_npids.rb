@@ -6,7 +6,7 @@ master_ids.each do |master_id|
         npid = NationalPatientIdentifier.new
         npid.value = master_id.value
         npid.assigner_site_id = master_id.assigner_site_id
-        npid.assigner_at = Date.today
+        npid.assigned_at = Date.today
         npid.save
         puts "Created npid"
     else
