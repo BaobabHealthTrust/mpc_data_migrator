@@ -9,6 +9,7 @@ gem 'redirectr'
 gem 'guid'
 
 gem 'bcrypt', '3.1.7'
+gem 'rb-readline'
 
 gem 'bcrypt-ruby', :require => 'bcrypt'
 

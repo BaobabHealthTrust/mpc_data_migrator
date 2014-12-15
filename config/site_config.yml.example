@@ -1,7 +1,9 @@
 production:
+  master: true
   mode: proxy
   site_id: 5
 development:
+  master: true
   mode: proxy
   site_id: 5
   

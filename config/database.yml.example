@@ -14,6 +14,22 @@ production:
   password: password
   pool: 500
 
+dde_master_development:
+  adapter: mysql2
+  database: openmrs
+  host: localhost
+  username: root
+  password: password
+  pool: 500
+  
+dde_master_production:
+  adapter: mysql2
+  database: openmrs
+  host: localhost
+  username: root
+  password: password
+  pool: 500
+
 openmrs_bart2_development:
   adapter: mysql2
   database: openmrs_mpc
