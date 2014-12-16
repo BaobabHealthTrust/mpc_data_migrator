@@ -20,7 +20,7 @@ app_ids.each do |app_id|
       person = eval("#{app}Person").find(app_id.patient_id)
       person_params = self.build_dde_person(person)
       person_id = self.create_person_on_dde(person_params)
-      unless person_id.blank?
+      if person_id
           national_id.person_id = person_id
           national_id.save!
       end
@@ -43,13 +43,15 @@ def self.create_person_on_dde(params)
                          :family_name => params["person"]["data"]["names"]["family_name"] ,
                          :gender => params["person"]["data"]["gender"] ,
                          :birthdate => params["person"]["data"]["birthdate"] ,
+                         :creator_id => 1,
                          :birthdate_estimated => params["person"]["data"]["birthdate_estimated"],
                          :version_number => version,
                          :remote_version_number => version }
                         )
-    LogVer4.info person_hash and return if national_id.length == 6
-    @person = Person.new(person_hash)
-     if @person.save!
+   
+    @person = Person.create(person_hash)
+    
+     if @person
         unless passed_national_id.blank?
           legacy_national_id = LegacyNationalIds.new()
           legacy_national_id.person_id = @person.id
@@ -58,11 +60,11 @@ def self.create_person_on_dde(params)
         end
         self.log_progress("migrated ***#{national_id}***")
         LogIds.info national_id.to_s
-        return @person.id
+        
      else
        LogErr.error "passed national id " + passed_national_id.to_s
      end
-     
+    return @person.id 
 end
 
 
@@ -101,37 +103,6 @@ def self.build_dde_person(person)
             }
           }
   return self.build_person_for_dde(current_person)
-end
-
-def self.create_person_on_dde(params)
-  passed_national_id = (params['person']['data']['patient']['identifiers']['old_identification_number'])
-  national_id = passed_national_id.gsub('-','').strip unless passed_national_id.blank?
-  version = Guid.new.to_s
-  person_hash = params['person'].merge(
-                         {:creator_site_id => Site.current_id ,
-                         :given_name => params["person"]["data"]["names"]["given_name"] ,
-                         :family_name => params["person"]["data"]["names"]["family_name"] ,
-                         :gender => params["person"]["data"]["gender"] ,
-                         :birthdate => params["person"]["data"]["birthdate"] ,
-                         :creator_id => 1 ,
-                         :birthdate_estimated => params["person"]["data"]["birthdate_estimated"],
-                         :version_number => version,
-                         :remote_version_number => version }
-                        )
-    
-    @person = Person.new(person_hash)
-     if @person.save!
-        unless passed_national_id.blank?
-          legacy_national_id = LegacyNationalIds.new()
-          legacy_national_id.person_id = @person.id
-          legacy_national_id.value = national_id
-          legacy_national_id.save! rescue LogErr.error "passed national id " + passed_national_id.to_s
-        end
-        self.log_progress("migrated ***#{national_id}***")
-        LogIds.info national_id.to_s
-     else
-       LogErr.error "passed national id " + passed_national_id.to_s
-     end
 end
 
 def self.build_person_for_dde(params)
